@@ -21,6 +21,13 @@ define(function(require) {
       this.$loading = $('.loading');
 
       this.locationKeys = ['module', 'route1', 'route2', 'route3', 'route4'];
+
+       // For scrolling pageEditView when we back from block or component
+      Origin.on('all', function(eventType){
+        if(eventType == 'sidebar:views:animateIn')
+          if(window.savePageScrollTop > 0)
+            $('.page').scrollTo(window.savePageScrollTop);
+      });
     },
 
     isUserAuthenticated: function() {
@@ -75,6 +82,13 @@ define(function(require) {
     },
 
     handleRoute: function(module, route1, route2, route3, route4) {
+
+      // For scrolling pageEditView when we back from block or component
+      if(window.prevRoute2)
+        if(window.prevRoute2 == 'page')
+          window.savePageScrollTop = $('.page').scrollTop();
+      window.prevRoute2 = route2;
+
       // Show loading on any route
       this.showLoading();
       // Remove views
