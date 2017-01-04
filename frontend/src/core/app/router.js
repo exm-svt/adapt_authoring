@@ -23,10 +23,14 @@ define(function(require) {
       this.locationKeys = ['module', 'route1', 'route2', 'route3', 'route4'];
 
        // For scrolling pageEditView when we back from block or component
-      Origin.on('all', function(eventType){
-        if(eventType == 'sidebar:views:animateIn')
-          if(window.savePageScrollTop > 0)
-            $('.page').scrollTo(window.savePageScrollTop);
+      Origin.on('all', function(eventType, event){
+        // console.log(eventType);
+        if((eventType == 'sidebar:views:animateIn' || (eventType == 'key:down' && event.keyCode == 32)) && window.prevRoute2 == 'page') //key space
+        {
+            if(window.savePageScrollTop > 0)
+              _.defer(function(){$('.page').scrollTo(window.savePageScrollTop);});
+              
+        }
       });
     },
 
